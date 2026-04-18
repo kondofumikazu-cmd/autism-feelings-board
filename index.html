@@ -30,6 +30,8 @@
         <h2>1. いまの気持ち</h2>
         <p class="hint">1つ選んでも、複数選んでも大丈夫です。</p>
         <div class="choice-grid" id="emotionChoices"></div>
+        <label class="field-label" for="emotionOther">その他</label>
+        <input id="emotionOther" type="text" placeholder="ほかの気持ちを書く" />
       </section>
 
       <section class="panel">
@@ -42,6 +44,8 @@
         <h2>3. いま困っていること</h2>
         <p class="hint">体や環境のつらさも選べます。</p>
         <div class="choice-grid" id="problemChoices"></div>
+        <label class="field-label" for="problemOther">その他</label>
+        <input id="problemOther" type="text" placeholder="ほかに困っていることを書く" />
       </section>
 
       <section class="panel">
@@ -56,7 +60,7 @@
         <textarea id="freeText" rows="5" placeholder="例：いまは音がつらいです。少し静かな場所で、紙に書いて説明してほしいです。"></textarea>
 
         <label class="field-label" for="nameText">名前や呼ばれたい呼び方（任意）</label>
-        <input id="nameText" type="text" placeholder="例：近藤、ふみ、名前なし" />
+        <input id="nameText" type="text" placeholder="例：上の名前、下の名前、あだ名など" />
       </section>
 
       <section class="panel">
@@ -197,6 +201,8 @@ const distressScale = document.getElementById("distressScale");
 const quickCardsRoot = document.getElementById("quickCards");
 const freeText = document.getElementById("freeText");
 const nameText = document.getElementById("nameText");
+const emotionOther = document.getElementById("emotionOther");
+const problemOther = document.getElementById("problemOther");
 const outputText = document.getElementById("outputText");
 const statusText = document.getElementById("status");
 const form = document.getElementById("feelingsForm");
@@ -263,6 +269,8 @@ function buildMessage() {
   const selectedEmotions = getSelectedValues("emotionChoices");
   const selectedProblems = getSelectedValues("problemChoices");
   const selectedSupports = getSelectedValues("supportChoices");
+  const emotionOtherText = emotionOther.value.trim();
+  const problemOtherText = problemOther.value.trim();
   const distress = getDistress();
   const note = freeText.value.trim();
 
@@ -272,14 +280,20 @@ function buildMessage() {
     lines.push(`名前：${name}`);
   }
 
-  if (selectedEmotions.length > 0) {
-    lines.push(`いまの気持ち：${selectedEmotions.join("、")}`);
+  const emotionParts = [...selectedEmotions];
+  if (emotionOtherText) emotionParts.push(`その他：${emotionOtherText}`);
+
+  if (emotionParts.length > 0) {
+    lines.push(`いまの気持ち：${emotionParts.join("、")}`);
   }
 
   lines.push(`しんどさの強さ：${distress} / 5（${distressLabels[distress].replace(/^\d\s/, "")}）`);
 
-  if (selectedProblems.length > 0) {
-    lines.push(`困っていること：${selectedProblems.join("、")}`);
+  const problemParts = [...selectedProblems];
+  if (problemOtherText) problemParts.push(`その他：${problemOtherText}`);
+
+  if (problemParts.length > 0) {
+    lines.push(`困っていること：${problemParts.join("、")}`);
   }
 
   if (selectedSupports.length > 0) {
@@ -294,13 +308,13 @@ function buildMessage() {
   lines.push("相手に見せる用の短い文章：");
 
   let shortText = "いま";
-  if (selectedEmotions.length > 0) {
-    shortText += `、${selectedEmotions.join("・")}`;
+  if (emotionParts.length > 0) {
+    shortText += `、${emotionParts.join("・")}`;
   }
   shortText += `です。`;
 
-  if (selectedProblems.length > 0) {
-    shortText += ` 困っていることは、${selectedProblems.join("、")}です。`;
+  if (problemParts.length > 0) {
+    shortText += ` 困っていることは、${problemParts.join("、")}です。`;
   }
   if (selectedSupports.length > 0) {
     shortText += ` ${selectedSupports.join("、")}。`;
@@ -347,6 +361,8 @@ function saveState() {
     distress: getDistress(),
     freeText: freeText.value,
     nameText: nameText.value,
+    emotionOther: emotionOther.value,
+    problemOther: problemOther.value,
     output: outputText.value
   };
   localStorage.setItem("ima-no-kimochi-card", JSON.stringify(state));
@@ -367,6 +383,8 @@ function loadState() {
     setDistress(typeof state.distress === "number" ? state.distress : 0);
     freeText.value = state.freeText || "";
     nameText.value = state.nameText || "";
+    emotionOther.value = state.emotionOther || "";
+    problemOther.value = state.problemOther || "";
     outputText.value = state.output || buildMessage();
   } catch {
     updateOutput();
@@ -383,6 +401,8 @@ loadState();
 form.addEventListener("change", updateOutput);
 freeText.addEventListener("input", updateOutput);
 nameText.addEventListener("input", updateOutput);
+emotionOther.addEventListener("input", updateOutput);
+problemOther.addEventListener("input", updateOutput);
 
 document.getElementById("generateBtn").addEventListener("click", updateOutput);
 document.getElementById("copyBtn").addEventListener("click", copyOutput);
@@ -394,6 +414,8 @@ form.addEventListener("reset", () => {
     outputText.value = "";
     freeText.value = "";
     nameText.value = "";
+    emotionOther.value = "";
+    problemOther.value = "";
     setDistress(0);
     updateOutput();
     setStatus("リセットしました。");
