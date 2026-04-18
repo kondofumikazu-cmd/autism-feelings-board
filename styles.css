@@ -1,0 +1,238 @@
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --text: #111111;
+  --muted: #404040;
+  --border: #111111;
+  --panel: #ffffff;
+  --panel-2: #f4f4f4;
+  --accent: #111111;
+  --focus: #111111;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --text: #ffd400;
+    --muted: #e7cf66;
+    --border: #ffd400;
+    --panel: #000000;
+    --panel-2: #0f0f0f;
+    --accent: #ffd400;
+    --focus: #ffd400;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 18px;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  line-height: 1.7;
+}
+
+.container {
+  width: min(960px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 56px;
+}
+
+.hero,
+.panel {
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  background: var(--panel);
+}
+
+.hero {
+  padding: 24px;
+  margin-bottom: 18px;
+}
+
+.panel {
+  padding: 20px;
+  margin-bottom: 18px;
+}
+
+.panel.small p:last-child {
+  margin-bottom: 0;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+
+h1,
+h2 {
+  line-height: 1.3;
+  margin: 0 0 10px;
+}
+
+h1 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+}
+
+h2 {
+  font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+}
+
+.lead,
+.hint,
+.status {
+  color: var(--muted);
+}
+
+.stack {
+  display: block;
+}
+
+.choice-grid,
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.choice-card,
+.quick-card,
+.scale-btn {
+  border: 2px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 14px;
+  padding: 14px 12px;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.choice-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 72px;
+}
+
+.choice-card input,
+.scale-btn input {
+  inline-size: 1.2rem;
+  block-size: 1.2rem;
+  accent-color: var(--accent);
+  margin: 0;
+}
+
+.choice-label {
+  font-weight: 700;
+}
+
+.choice-desc {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.scale {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.scale-btn {
+  text-align: center;
+  min-height: 72px;
+}
+
+.scale-num {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.scale-text {
+  display: block;
+  font-size: 0.92rem;
+}
+
+.choice-card:hover,
+.quick-card:hover,
+.scale-btn:hover,
+button:hover {
+  background: var(--panel-2);
+}
+
+.choice-card:focus-within,
+.quick-card:focus-visible,
+.scale-btn:focus-within,
+button:focus-visible,
+textarea:focus,
+input[type="text"]:focus {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.field-label {
+  display: block;
+  margin: 14px 0 8px;
+  font-weight: 700;
+}
+
+textarea,
+input[type="text"] {
+  width: 100%;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  font: inherit;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+button {
+  border: 2px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+button.secondary {
+  opacity: 0.92;
+}
+
+.steps {
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+@media (max-width: 700px) {
+  html {
+    font-size: 17px;
+  }
+
+  .container {
+    width: min(100% - 20px, 960px);
+  }
+
+  .scale {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
