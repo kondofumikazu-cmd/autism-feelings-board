@@ -30,8 +30,8 @@
         <h2>1. いまの気持ち</h2>
         <p class="hint">1つ選んでも、複数選んでも大丈夫です。</p>
         <div class="choice-grid" id="emotionChoices"></div>
-        <label class="field-label" for="emotionOther">その他</label>
-        <input id="emotionOther" type="text" placeholder="ほかの気持ちを書く" />
+        <label class="field-label" for="emotionOther">その他（自由入力）</label>
+        <input id="emotionOther" type="text" placeholder="例：むなしい、そわそわする、安心したい" autocomplete="off" />
       </section>
 
       <section class="panel">
@@ -44,8 +44,8 @@
         <h2>3. いま困っていること</h2>
         <p class="hint">体や環境のつらさも選べます。</p>
         <div class="choice-grid" id="problemChoices"></div>
-        <label class="field-label" for="problemOther">その他</label>
-        <input id="problemOther" type="text" placeholder="ほかに困っていることを書く" />
+        <label class="field-label" for="problemOther">その他（自由入力）</label>
+        <input id="problemOther" type="text" placeholder="例：においがつらい、待つのがつらい、急な変更がつらい" autocomplete="off" />
       </section>
 
       <section class="panel">
@@ -60,13 +60,13 @@
         <textarea id="freeText" rows="5" placeholder="例：いまは音がつらいです。少し静かな場所で、紙に書いて説明してほしいです。"></textarea>
 
         <label class="field-label" for="nameText">名前や呼ばれたい呼び方（任意）</label>
-        <input id="nameText" type="text" placeholder="例：上の名前、下の名前、あだ名など" />
+        <input id="nameText" type="text" placeholder="例：上の名前、下の名前、あだ名など" autocomplete="off" />
       </section>
 
       <section class="panel">
         <h2>6. 表示する文章</h2>
         <p class="hint">下の文章は自動で作られます。必要なら自由に直してください。</p>
-        <textarea id="outputText" rows="9" aria-label="作成された文章"></textarea>
+        <textarea id="outputText" rows="11" aria-label="作成された文章"></textarea>
         <div class="button-row">
           <button type="button" id="generateBtn">文章を作る</button>
           <button type="button" id="copyBtn">コピー</button>
@@ -147,53 +147,6 @@ const distressLabels = [
   "5 すぐ助けがほしい"
 ];
 
-const quickCards = [
-  {
-    label: "音がつらい",
-    apply: () => {
-      setChecks("emotionChoices", ["overloaded", "anxious"]);
-      setChecks("problemChoices", ["noise"]);
-      setChecks("supportChoices", ["quiet", "write", "slow"]);
-      setDistress(3);
-      freeText.value = "いまは音がつらいです。静かな場所で、短く書いて説明してほしいです。";
-      updateOutput();
-    }
-  },
-  {
-    label: "予定がわからず不安",
-    apply: () => {
-      setChecks("emotionChoices", ["anxious", "confused"]);
-      setChecks("problemChoices", ["schedule"]);
-      setChecks("supportChoices", ["scheduleView", "write", "repeat"]);
-      setDistress(2);
-      freeText.value = "これから何をするか、順番で見せてほしいです。";
-      updateOutput();
-    }
-  },
-  {
-    label: "言葉が出にくい",
-    apply: () => {
-      setChecks("emotionChoices", ["cantTell", "confused"]);
-      setChecks("problemChoices", ["wording", "talkspeed"]);
-      setChecks("supportChoices", ["choice", "wait", "write"]);
-      setDistress(2);
-      freeText.value = "すぐに答えにくいです。選択肢で聞いて、少し待ってください。";
-      updateOutput();
-    }
-  },
-  {
-    label: "少し休みたい",
-    apply: () => {
-      setChecks("emotionChoices", ["tired"]);
-      setChecks("problemChoices", ["sleepy"]);
-      setChecks("supportChoices", ["break", "alone"]);
-      setDistress(2);
-      freeText.value = "少し休むと戻れるかもしれません。";
-      updateOutput();
-    }
-  }
-];
-
 const emotionChoices = document.getElementById("emotionChoices");
 const problemChoices = document.getElementById("problemChoices");
 const supportChoices = document.getElementById("supportChoices");
@@ -206,6 +159,57 @@ const problemOther = document.getElementById("problemOther");
 const outputText = document.getElementById("outputText");
 const statusText = document.getElementById("status");
 const form = document.getElementById("feelingsForm");
+
+const quickCards = [
+  {
+    label: "音がつらい",
+    apply: () => {
+      resetForm(false);
+      setChecks("emotionChoices", ["overloaded", "anxious"]);
+      setChecks("problemChoices", ["noise"]);
+      setChecks("supportChoices", ["quiet", "write", "slow"]);
+      setDistress(3);
+      freeText.value = "いまは音がつらいです。静かな場所で、短く書いて説明してほしいです。";
+      updateOutput();
+    }
+  },
+  {
+    label: "予定がわからず不安",
+    apply: () => {
+      resetForm(false);
+      setChecks("emotionChoices", ["anxious", "confused"]);
+      setChecks("problemChoices", ["schedule"]);
+      setChecks("supportChoices", ["scheduleView", "write", "repeat"]);
+      setDistress(2);
+      freeText.value = "これから何をするか、順番で見せてほしいです。";
+      updateOutput();
+    }
+  },
+  {
+    label: "言葉が出にくい",
+    apply: () => {
+      resetForm(false);
+      setChecks("emotionChoices", ["cantTell", "confused"]);
+      setChecks("problemChoices", ["wording", "talkspeed"]);
+      setChecks("supportChoices", ["choice", "wait", "write"]);
+      setDistress(2);
+      freeText.value = "すぐに答えにくいです。選択肢で聞いて、少し待ってください。";
+      updateOutput();
+    }
+  },
+  {
+    label: "少し休みたい",
+    apply: () => {
+      resetForm(false);
+      setChecks("emotionChoices", ["tired"]);
+      setChecks("problemChoices", ["sleepy"]);
+      setChecks("supportChoices", ["break", "alone"]);
+      setDistress(2);
+      freeText.value = "少し休むと戻れるかもしれません。";
+      updateOutput();
+    }
+  }
+];
 
 function renderCheckboxGroup(root, items, name) {
   root.innerHTML = items.map(item => `
@@ -234,7 +238,7 @@ function renderDistressScale() {
 
 function renderQuickCards() {
   quickCardsRoot.innerHTML = "";
-  quickCards.forEach((card, index) => {
+  quickCards.forEach(card => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "quick-card";
@@ -269,10 +273,21 @@ function buildMessage() {
   const selectedEmotions = getSelectedValues("emotionChoices");
   const selectedProblems = getSelectedValues("problemChoices");
   const selectedSupports = getSelectedValues("supportChoices");
-  const emotionOtherText = emotionOther.value.trim();
-  const problemOtherText = problemOther.value.trim();
   const distress = getDistress();
+  const emotionOtherValue = emotionOther.value.trim();
+  const problemOtherValue = problemOther.value.trim();
   const note = freeText.value.trim();
+
+  const emotionList = [...selectedEmotions];
+  const problemList = [...selectedProblems];
+
+  if (emotionOtherValue) {
+    emotionList.push(`その他（${emotionOtherValue}）`);
+  }
+
+  if (problemOtherValue) {
+    problemList.push(`その他（${problemOtherValue}）`);
+  }
 
   const lines = [];
 
@@ -280,20 +295,14 @@ function buildMessage() {
     lines.push(`名前：${name}`);
   }
 
-  const emotionParts = [...selectedEmotions];
-  if (emotionOtherText) emotionParts.push(`その他：${emotionOtherText}`);
-
-  if (emotionParts.length > 0) {
-    lines.push(`いまの気持ち：${emotionParts.join("、")}`);
+  if (emotionList.length > 0) {
+    lines.push(`いまの気持ち：${emotionList.join("、")}`);
   }
 
   lines.push(`しんどさの強さ：${distress} / 5（${distressLabels[distress].replace(/^\d\s/, "")}）`);
 
-  const problemParts = [...selectedProblems];
-  if (problemOtherText) problemParts.push(`その他：${problemOtherText}`);
-
-  if (problemParts.length > 0) {
-    lines.push(`困っていること：${problemParts.join("、")}`);
+  if (problemList.length > 0) {
+    lines.push(`困っていること：${problemList.join("、")}`);
   }
 
   if (selectedSupports.length > 0) {
@@ -308,13 +317,13 @@ function buildMessage() {
   lines.push("相手に見せる用の短い文章：");
 
   let shortText = "いま";
-  if (emotionParts.length > 0) {
-    shortText += `、${emotionParts.join("・")}`;
+  if (emotionList.length > 0) {
+    shortText += `、${emotionList.join("・")}`;
   }
-  shortText += `です。`;
+  shortText += "です。";
 
-  if (problemParts.length > 0) {
-    shortText += ` 困っていることは、${problemParts.join("、")}です。`;
+  if (problemList.length > 0) {
+    shortText += ` 困っていることは、${problemList.join("、")}です。`;
   }
   if (selectedSupports.length > 0) {
     shortText += ` ${selectedSupports.join("、")}。`;
@@ -329,7 +338,6 @@ function buildMessage() {
 
 function updateOutput() {
   outputText.value = buildMessage();
-  saveState();
 }
 
 function copyOutput() {
@@ -349,45 +357,26 @@ function downloadText() {
   setStatus("テキストを保存しました。");
 }
 
-function setStatus(message) {
+function setStatus(message = "") {
   statusText.textContent = message;
 }
 
-function saveState() {
-  const state = {
-    emotions: [...document.querySelectorAll('#emotionChoices input')].filter(el => el.checked).map(el => el.dataset.id),
-    problems: [...document.querySelectorAll('#problemChoices input')].filter(el => el.checked).map(el => el.dataset.id),
-    supports: [...document.querySelectorAll('#supportChoices input')].filter(el => el.checked).map(el => el.dataset.id),
-    distress: getDistress(),
-    freeText: freeText.value,
-    nameText: nameText.value,
-    emotionOther: emotionOther.value,
-    problemOther: problemOther.value,
-    output: outputText.value
-  };
-  localStorage.setItem("ima-no-kimochi-card", JSON.stringify(state));
-}
-
-function loadState() {
-  const raw = localStorage.getItem("ima-no-kimochi-card");
-  if (!raw) {
-    updateOutput();
-    return;
-  }
-
-  try {
-    const state = JSON.parse(raw);
-    setChecks("emotionChoices", state.emotions || []);
-    setChecks("problemChoices", state.problems || []);
-    setChecks("supportChoices", state.supports || []);
-    setDistress(typeof state.distress === "number" ? state.distress : 0);
-    freeText.value = state.freeText || "";
-    nameText.value = state.nameText || "";
-    emotionOther.value = state.emotionOther || "";
-    problemOther.value = state.problemOther || "";
-    outputText.value = state.output || buildMessage();
-  } catch {
-    updateOutput();
+function resetForm(showStatus = true) {
+  form.reset();
+  document.querySelectorAll('#emotionChoices input[type="checkbox"], #problemChoices input[type="checkbox"], #supportChoices input[type="checkbox"]').forEach(input => {
+    input.checked = false;
+  });
+  freeText.value = "";
+  nameText.value = "";
+  emotionOther.value = "";
+  problemOther.value = "";
+  outputText.value = "";
+  setDistress(0);
+  updateOutput();
+  if (showStatus) {
+    setStatus("リセットしました。")
+  } else {
+    setStatus("");
   }
 }
 
@@ -396,7 +385,7 @@ renderCheckboxGroup(problemChoices, problems, "problem");
 renderCheckboxGroup(supportChoices, supports, "support");
 renderDistressScale();
 renderQuickCards();
-loadState();
+resetForm(false);
 
 form.addEventListener("change", updateOutput);
 freeText.addEventListener("input", updateOutput);
@@ -409,19 +398,12 @@ document.getElementById("copyBtn").addEventListener("click", copyOutput);
 document.getElementById("downloadBtn").addEventListener("click", downloadText);
 
 form.addEventListener("reset", () => {
-  setTimeout(() => {
-    localStorage.removeItem("ima-no-kimochi-card");
-    outputText.value = "";
-    freeText.value = "";
-    nameText.value = "";
-    emotionOther.value = "";
-    problemOther.value = "";
-    setDistress(0);
-    updateOutput();
-    setStatus("リセットしました。");
-  }, 0);
+  setTimeout(() => resetForm(true), 0);
 });
 
+window.addEventListener("pageshow", () => {
+  resetForm(false);
+});
   </script>
 </body>
 </html>
