@@ -2,10 +2,10 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="light dark" />
   <meta name="description" content="自閉スペクトラム症の人が、いまの気持ちや必要な支援を、テキストと選択肢で伝えやすくする日本語Webサイトです。" />
-  <title>いまの気持ちカード PDF</title>
+  <title>いまの気持ちカード</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -85,361 +85,457 @@
         <li>「<ruby>文章<rt>ぶんしょう</rt></ruby>を<ruby>作<rt>つく</rt></ruby>る」を<ruby>押<rt>お</rt></ruby>して、そのまま<ruby>見<rt>み</rt></ruby>せるかコピーします。</li>
       </ol>
     </section>
+
+    <section class="panel small">
+      <h2>このページの<ruby>考<rt>かんが</rt></ruby>え<ruby>方<rt>かた</rt></ruby></h2>
+      <p>
+        このページは、<ruby>視覚的<rt>しかくてき</rt></ruby>な<ruby>選択肢<rt>せんたくし</rt></ruby>、AAC、<ruby>本人<rt>ほんにん</rt></ruby>の<ruby>好<rt>この</rt></ruby>みや<ruby>支援<rt>しえん</rt></ruby>ニーズの<ruby>明示<rt>めいじ</rt></ruby>、
+        そしてOSのダークモード<ruby>設定<rt>せってい</rt></ruby>を<ruby>尊重<rt>そんちょう</rt></ruby>する<ruby>実装<rt>じっそう</rt></ruby>を<ruby>前提<rt>ぜんてい</rt></ruby>に<ruby>設計<rt>せっけい</rt></ruby>しています。
+      </p>
+      <p>
+        <ruby>詳<rt>くわ</rt></ruby>しい<ruby>参考<rt>さんこう</rt></ruby><ruby>文献<rt>ぶんけん</rt></ruby>は README にまとめています。
+      </p>
+    </section>
   </main>
 
   <script>
-  (() => {
-    const DATA = {
-      emotions: [
-        { id: "calm", label: "落ち着いている", desc: "大きな問題はない", html: "<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>いている", descHtml: "<ruby>大<rt>おお</rt></ruby>きな<ruby>問題<rt>もんだい</rt></ruby>はない" },
-        { id: "anxious", label: "不安", desc: "先のことが気になる", html: "<ruby>不安<rt>ふあん</rt></ruby>", descHtml: "<ruby>先<rt>さき</rt></ruby>のことが<ruby>気<rt>き</rt></ruby>になる" },
-        { id: "confused", label: "混乱", desc: "何をすればよいかわからない", html: "<ruby>混乱<rt>こんらん</rt></ruby>", descHtml: "<ruby>何<rt>なに</rt></ruby>をすればよいかわからない" },
-        { id: "angry", label: "いらいら", desc: "刺激や状況がつらい", html: "いらいら", descHtml: "<ruby>刺激<rt>しげき</rt></ruby>や<ruby>状況<rt>じょうきょう</rt></ruby>がつらい" },
-        { id: "sad", label: "悲しい", desc: "気持ちが落ちている", html: "<ruby>悲<rt>かな</rt></ruby>しい", descHtml: "<ruby>気持<rt>きも</rt></ruby>ちが<ruby>落<rt>お</rt></ruby>ちている" },
-        { id: "tired", label: "疲れた", desc: "休みたい", html: "<ruby>疲<rt>つか</rt></ruby>れた", descHtml: "<ruby>休<rt>やす</rt></ruby>みたい" },
-        { id: "scared", label: "こわい", desc: "安心できない", html: "こわい", descHtml: "<ruby>安心<rt>あんしん</rt></ruby>できない" },
-        { id: "overloaded", label: "限界に近い", desc: "刺激が多すぎる", html: "<ruby>限界<rt>げんかい</rt></ruby>に<ruby>近<rt>ちか</rt></ruby>い", descHtml: "<ruby>刺激<rt>しげき</rt></ruby>が<ruby>多<rt>おお</rt></ruby>すぎる" },
-        { id: "happy", label: "うれしい", desc: "安心している", html: "うれしい", descHtml: "<ruby>安心<rt>あんしん</rt></ruby>している" },
-        { id: "cantTell", label: "うまく言えない", desc: "言葉にしづらい", html: "うまく<ruby>言<rt>い</rt></ruby>えない", descHtml: "<ruby>言葉<rt>ことば</rt></ruby>にしづらい" }
-      ],
-      problems: [
-        { id: "noise", label: "音がつらい", desc: "大きい音・話し声・機械音", html: "<ruby>音<rt>おと</rt></ruby>がつらい", descHtml: "<ruby>大<rt>おお</rt></ruby>きい<ruby>音<rt>おと</rt></ruby>・<ruby>話<rt>はな</rt></ruby>し<ruby>声<rt>こえ</rt></ruby>・<ruby>機械<rt>きかい</rt></ruby><ruby>音<rt>おん</rt></ruby>" },
-        { id: "light", label: "光がつらい", desc: "まぶしい・点滅がつらい", html: "<ruby>光<rt>ひかり</rt></ruby>がつらい", descHtml: "まぶしい・<ruby>点滅<rt>てんめつ</rt></ruby>がつらい" },
-        { id: "crowd", label: "人が多くてつらい", desc: "近さ・視線・ざわつき", html: "<ruby>人<rt>ひと</rt></ruby>が<ruby>多<rt>おお</rt></ruby>くてつらい", descHtml: "<ruby>近<rt>ちか</rt></ruby>さ・<ruby>視線<rt>しせん</rt></ruby>・ざわつき" },
-        { id: "schedule", label: "予定がわからない", desc: "見通しが持てない", html: "<ruby>予定<rt>よてい</rt></ruby>がわからない", descHtml: "<ruby>見通<rt>みとお</rt></ruby>しが<ruby>持<rt>も</rt></ruby>てない" },
-        { id: "talkspeed", label: "話が速い", desc: "理解が追いつかない", html: "<ruby>話<rt>はなし</rt></ruby>が<ruby>速<rt>はや</rt></ruby>い", descHtml: "<ruby>理解<rt>りかい</rt></ruby>が<ruby>追<rt>お</rt></ruby>いつかない" },
-        { id: "wording", label: "言葉が出にくい", desc: "頭ではわかるが言えない", html: "<ruby>言葉<rt>ことば</rt></ruby>が<ruby>出<rt>で</rt></ruby>にくい", descHtml: "<ruby>頭<rt>あたま</rt></ruby>ではわかるが<ruby>言<rt>い</rt></ruby>えない" },
-        { id: "pain", label: "体が痛い", desc: "頭痛・腹痛・その他", html: "<ruby>体<rt>からだ</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>い", descHtml: "<ruby>頭痛<rt>ずつう</rt></ruby>・<ruby>腹痛<rt>ふくつう</rt></ruby>・その<ruby>他<rt>た</rt></ruby>" },
-        { id: "sleepy", label: "眠い", desc: "集中しにくい", html: "<ruby>眠<rt>ねむ</rt></ruby>い", descHtml: "<ruby>集中<rt>しゅうちゅう</rt></ruby>しにくい" },
-        { id: "hotcold", label: "暑い・寒い", desc: "体温や空調がつらい", html: "<ruby>暑<rt>あつ</rt></ruby>い・<ruby>寒<rt>さむ</rt></ruby>い", descHtml: "<ruby>体温<rt>たいおん</rt></ruby>や<ruby>空調<rt>くうちょう</rt></ruby>がつらい" },
-        { id: "hungry", label: "空腹・のどの渇き", desc: "食事や水分が必要", html: "<ruby>空腹<rt>くうふく</rt></ruby>・のどの<ruby>渇<rt>かわ</rt></ruby>き", descHtml: "<ruby>食事<rt>しょくじ</rt></ruby>や<ruby>水分<rt>すいぶん</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>" }
-      ],
-      supports: [
-        { id: "write", label: "書いて説明してほしい", desc: "紙・スマホ画面・メモ", html: "<ruby>書<rt>か</rt></ruby>いて<ruby>説明<rt>せつめい</rt></ruby>してほしい", descHtml: "<ruby>紙<rt>かみ</rt></ruby>・スマホ<ruby>画面<rt>がめん</rt></ruby>・メモ" },
-        { id: "slow", label: "ゆっくり話してほしい", desc: "一文を短くしてほしい", html: "ゆっくり<ruby>話<rt>はな</rt></ruby>してほしい", descHtml: "<ruby>一文<rt>いちぶん</rt></ruby>を<ruby>短<rt>みじか</rt></ruby>くしてほしい" },
-        { id: "choice", label: "選択肢で聞いてほしい", desc: "Yes/No や候補提示", html: "<ruby>選択肢<rt>せんたくし</rt></ruby>で<ruby>聞<rt>き</rt></ruby>いてほしい", descHtml: "Yes/No や<ruby>候補<rt>こうほ</rt></ruby><ruby>提示<rt>ていじ</rt></ruby>" },
-        { id: "wait", label: "少し待ってほしい", desc: "考える時間が必要", html: "<ruby>少<rt>すこ</rt></ruby>し<ruby>待<rt>ま</rt></ruby>ってほしい", descHtml: "<ruby>考<rt>かんが</rt></ruby>える<ruby>時間<rt>じかん</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>" },
-        { id: "quiet", label: "静かな場所に行きたい", desc: "刺激を減らしたい", html: "<ruby>静<rt>しず</rt></ruby>かな<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>行<rt>い</rt></ruby>きたい", descHtml: "<ruby>刺激<rt>しげき</rt></ruby>を<ruby>減<rt>へ</rt></ruby>らしたい" },
-        { id: "break", label: "休憩したい", desc: "一度止めて整えたい", html: "<ruby>休憩<rt>きゅうけい</rt></ruby>したい", descHtml: "<ruby>一度<rt>いちど</rt></ruby><ruby>止<rt>と</rt></ruby>めて<ruby>整<rt>ととの</rt></ruby>えたい" },
-        { id: "alone", label: "一人になりたい", desc: "距離を置きたい", html: "<ruby>一人<rt>ひとり</rt></ruby>になりたい", descHtml: "<ruby>距離<rt>きょり</rt></ruby>を<ruby>置<rt>お</rt></ruby>きたい" },
-        { id: "scheduleView", label: "予定を見せてほしい", desc: "順番や終わりを知りたい", html: "<ruby>予定<rt>よてい</rt></ruby>を<ruby>見<rt>み</rt></ruby>せてほしい", descHtml: "<ruby>順番<rt>じゅんばん</rt></ruby>や<ruby>終<rt>お</rt></ruby>わりを<ruby>知<rt>し</rt></ruby>りたい" },
-        { id: "repeat", label: "もう一度説明してほしい", desc: "別の言い方でも聞きたい", html: "もう<ruby>一度<rt>いちど</rt></ruby><ruby>説明<rt>せつめい</rt></ruby>してほしい", descHtml: "<ruby>別<rt>べつ</rt></ruby>の<ruby>言<rt>い</rt></ruby>い<ruby>方<rt>かた</rt></ruby>でも<ruby>聞<rt>き</rt></ruby>きたい" },
-        { id: "contact", label: "支援者や家族に連絡してほしい", desc: "一人で対応が難しい", html: "<ruby>支援者<rt>しえんしゃ</rt></ruby>や<ruby>家族<rt>かぞく</rt></ruby>に<ruby>連絡<rt>れんらく</rt></ruby>してほしい", descHtml: "<ruby>一人<rt>ひとり</rt></ruby>で<ruby>対応<rt>たいおう</rt></ruby>が<ruby>難<rt>むずか</rt></ruby>しい" }
-      ],
-      distressLabels: ["落ち着いている", "少ししんどい", "まあまあしんどい", "かなりしんどい", "とてもつらい", "すぐ助けがほしい"],
-      distressHtmlLabels: [
-        { num: "0", text: "<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>いている" },
-        { num: "1", text: "<ruby>少<rt>すこ</rt></ruby>ししんどい" },
-        { num: "2", text: "まあまあしんどい" },
-        { num: "3", text: "かなりしんどい" },
-        { num: "4", text: "とてもつらい" },
-        { num: "5", text: "すぐ<ruby>助<rt>たす</rt></ruby>けがほしい" }
-      ]
-    };
+// label: 文章生成・値として使うプレーンテキスト
+// html / descHtml: 画面表示用（ふりがなあり）
+const emotions = [
+  { id: "calm",      label: "落ち着いている",   desc: "大きな問題はない",
+    html: "<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>いている",
+    descHtml: "<ruby>大<rt>おお</rt></ruby>きな<ruby>問題<rt>もんだい</rt></ruby>はない" },
+  { id: "anxious",   label: "不安",             desc: "先のことが気になる",
+    html: "<ruby>不安<rt>ふあん</rt></ruby>",
+    descHtml: "<ruby>先<rt>さき</rt></ruby>のことが<ruby>気<rt>き</rt></ruby>になる" },
+  { id: "confused",  label: "混乱",             desc: "何をすればよいかわからない",
+    html: "<ruby>混乱<rt>こんらん</rt></ruby>",
+    descHtml: "<ruby>何<rt>なに</rt></ruby>をすればよいかわからない" },
+  { id: "angry",     label: "いらいら",         desc: "刺激や状況がつらい",
+    html: "いらいら",
+    descHtml: "<ruby>刺激<rt>しげき</rt></ruby>や<ruby>状況<rt>じょうきょう</rt></ruby>がつらい" },
+  { id: "sad",       label: "悲しい",           desc: "気持ちが落ちている",
+    html: "<ruby>悲<rt>かな</rt></ruby>しい",
+    descHtml: "<ruby>気持<rt>きも</rt></ruby>ちが<ruby>落<rt>お</rt></ruby>ちている" },
+  { id: "tired",     label: "疲れた",           desc: "休みたい",
+    html: "<ruby>疲<rt>つか</rt></ruby>れた",
+    descHtml: "<ruby>休<rt>やす</rt></ruby>みたい" },
+  { id: "scared",    label: "こわい",           desc: "安心できない",
+    html: "こわい",
+    descHtml: "<ruby>安心<rt>あんしん</rt></ruby>できない" },
+  { id: "overloaded",label: "限界に近い",       desc: "刺激が多すぎる",
+    html: "<ruby>限界<rt>げんかい</rt></ruby>に<ruby>近<rt>ちか</rt></ruby>い",
+    descHtml: "<ruby>刺激<rt>しげき</rt></ruby>が<ruby>多<rt>おお</rt></ruby>すぎる" },
+  { id: "happy",     label: "うれしい",         desc: "安心している",
+    html: "うれしい",
+    descHtml: "<ruby>安心<rt>あんしん</rt></ruby>している" },
+  { id: "cantTell",  label: "うまく言えない",   desc: "言葉にしづらい",
+    html: "うまく<ruby>言<rt>い</rt></ruby>えない",
+    descHtml: "<ruby>言葉<rt>ことば</rt></ruby>にしづらい" }
+];
 
-    const $ = (selector, root = document) => root.querySelector(selector);
-    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+const problems = [
+  { id: "noise",     label: "音がつらい",       desc: "大きい音・話し声・機械音",
+    html: "<ruby>音<rt>おと</rt></ruby>がつらい",
+    descHtml: "<ruby>大<rt>おお</rt></ruby>きい<ruby>音<rt>おと</rt></ruby>・<ruby>話<rt>はな</rt></ruby>し<ruby>声<rt>こえ</rt></ruby>・<ruby>機械<rt>きかい</rt></ruby><ruby>音<rt>おん</rt></ruby>" },
+  { id: "light",     label: "光がつらい",       desc: "まぶしい・点滅がつらい",
+    html: "<ruby>光<rt>ひかり</rt></ruby>がつらい",
+    descHtml: "まぶしい・<ruby>点滅<rt>てんめつ</rt></ruby>がつらい" },
+  { id: "crowd",     label: "人が多くてつらい", desc: "近さ・視線・ざわつき",
+    html: "<ruby>人<rt>ひと</rt></ruby>が<ruby>多<rt>おお</rt></ruby>くてつらい",
+    descHtml: "<ruby>近<rt>ちか</rt></ruby>さ・<ruby>視線<rt>しせん</rt></ruby>・ざわつき" },
+  { id: "schedule",  label: "予定がわからない", desc: "見通しが持てない",
+    html: "<ruby>予定<rt>よてい</rt></ruby>がわからない",
+    descHtml: "<ruby>見通<rt>みとお</rt></ruby>しが<ruby>持<rt>も</rt></ruby>てない" },
+  { id: "talkspeed", label: "話が速い",         desc: "理解が追いつかない",
+    html: "<ruby>話<rt>はなし</rt></ruby>が<ruby>速<rt>はや</rt></ruby>い",
+    descHtml: "<ruby>理解<rt>りかい</rt></ruby>が<ruby>追<rt>お</rt></ruby>いつかない" },
+  { id: "wording",   label: "言葉が出にくい",   desc: "頭ではわかるが言えない",
+    html: "<ruby>言葉<rt>ことば</rt></ruby>が<ruby>出<rt>で</rt></ruby>にくい",
+    descHtml: "<ruby>頭<rt>あたま</rt></ruby>ではわかるが<ruby>言<rt>い</rt></ruby>えない" },
+  { id: "pain",      label: "体が痛い",         desc: "頭痛・腹痛・その他",
+    html: "<ruby>体<rt>からだ</rt></ruby>が<ruby>痛<rt>いた</rt></ruby>い",
+    descHtml: "<ruby>頭痛<rt>ずつう</rt></ruby>・<ruby>腹痛<rt>ふくつう</rt></ruby>・その<ruby>他<rt>た</rt></ruby>" },
+  { id: "sleepy",    label: "眠い",             desc: "集中しにくい",
+    html: "<ruby>眠<rt>ねむ</rt></ruby>い",
+    descHtml: "<ruby>集中<rt>しゅうちゅう</rt></ruby>しにくい" },
+  { id: "hotcold",   label: "暑い・寒い",       desc: "体温や空調がつらい",
+    html: "<ruby>暑<rt>あつ</rt></ruby>い・<ruby>寒<rt>さむ</rt></ruby>い",
+    descHtml: "<ruby>体温<rt>たいおん</rt></ruby>や<ruby>空調<rt>くうちょう</rt></ruby>がつらい" },
+  { id: "hungry",    label: "空腹・のどの渇き", desc: "食事や水分が必要",
+    html: "<ruby>空腹<rt>くうふく</rt></ruby>・のどの<ruby>渇<rt>かわ</rt></ruby>き",
+    descHtml: "<ruby>食事<rt>しょくじ</rt></ruby>や<ruby>水分<rt>すいぶん</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>" }
+];
 
-    const els = {
-      form: $("#feelingsForm"),
-      emotionChoices: $("#emotionChoices"),
-      problemChoices: $("#problemChoices"),
-      supportChoices: $("#supportChoices"),
-      distressScale: $("#distressScale"),
-      quickCards: $("#quickCards"),
-      freeText: $("#freeText"),
-      nameText: $("#nameText"),
-      emotionOther: $("#emotionOther"),
-      problemOther: $("#problemOther"),
-      outputText: $("#outputText"),
-      status: $("#status"),
-      generateBtn: $("#generateBtn"),
-      copyBtn: $("#copyBtn"),
-      downloadBtn: $("#downloadBtn"),
-      resetBtn: $("#resetBtn")
-    };
+const supports = [
+  { id: "write",        label: "書いて説明してほしい",         desc: "紙・スマホ画面・メモ",
+    html: "<ruby>書<rt>か</rt></ruby>いて<ruby>説明<rt>せつめい</rt></ruby>してほしい",
+    descHtml: "<ruby>紙<rt>かみ</rt></ruby>・スマホ<ruby>画面<rt>がめん</rt></ruby>・メモ" },
+  { id: "slow",         label: "ゆっくり話してほしい",         desc: "一文を短くしてほしい",
+    html: "ゆっくり<ruby>話<rt>はな</rt></ruby>してほしい",
+    descHtml: "<ruby>一文<rt>いちぶん</rt></ruby>を<ruby>短<rt>みじか</rt></ruby>くしてほしい" },
+  { id: "choice",       label: "選択肢で聞いてほしい",         desc: "Yes/No や候補提示",
+    html: "<ruby>選択肢<rt>せんたくし</rt></ruby>で<ruby>聞<rt>き</rt></ruby>いてほしい",
+    descHtml: "Yes/No や<ruby>候補<rt>こうほ</rt></ruby><ruby>提示<rt>ていじ</rt></ruby>" },
+  { id: "wait",         label: "少し待ってほしい",             desc: "考える時間が必要",
+    html: "<ruby>少<rt>すこ</rt></ruby>し<ruby>待<rt>ま</rt></ruby>ってほしい",
+    descHtml: "<ruby>考<rt>かんが</rt></ruby>える<ruby>時間<rt>じかん</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>" },
+  { id: "quiet",        label: "静かな場所に行きたい",         desc: "刺激を減らしたい",
+    html: "<ruby>静<rt>しず</rt></ruby>かな<ruby>場所<rt>ばしょ</rt></ruby>に<ruby>行<rt>い</rt></ruby>きたい",
+    descHtml: "<ruby>刺激<rt>しげき</rt></ruby>を<ruby>減<rt>へ</rt></ruby>らしたい" },
+  { id: "break",        label: "休憩したい",                   desc: "一度止めて整えたい",
+    html: "<ruby>休憩<rt>きゅうけい</rt></ruby>したい",
+    descHtml: "<ruby>一度<rt>いちど</rt></ruby><ruby>止<rt>と</rt></ruby>めて<ruby>整<rt>ととの</rt></ruby>えたい" },
+  { id: "alone",        label: "一人になりたい",               desc: "距離を置きたい",
+    html: "<ruby>一人<rt>ひとり</rt></ruby>になりたい",
+    descHtml: "<ruby>距離<rt>きょり</rt></ruby>を<ruby>置<rt>お</rt></ruby>きたい" },
+  { id: "scheduleView", label: "予定を見せてほしい",           desc: "順番や終わりを知りたい",
+    html: "<ruby>予定<rt>よてい</rt></ruby>を<ruby>見<rt>み</rt></ruby>せてほしい",
+    descHtml: "<ruby>順番<rt>じゅんばん</rt></ruby>や<ruby>終<rt>お</rt></ruby>わりを<ruby>知<rt>し</rt></ruby>りたい" },
+  { id: "repeat",       label: "もう一度説明してほしい",       desc: "別の言い方でも聞きたい",
+    html: "もう<ruby>一度<rt>いちど</rt></ruby><ruby>説明<rt>せつめい</rt></ruby>してほしい",
+    descHtml: "<ruby>別<rt>べつ</rt></ruby>の<ruby>言<rt>い</rt></ruby>い<ruby>方<rt>かた</rt></ruby>でも<ruby>聞<rt>き</rt></ruby>きたい" },
+  { id: "contact",      label: "支援者や家族に連絡してほしい", desc: "一人で対応が難しい",
+    html: "<ruby>支援者<rt>しえんしゃ</rt></ruby>や<ruby>家族<rt>かぞく</rt></ruby>に<ruby>連絡<rt>れんらく</rt></ruby>してほしい",
+    descHtml: "<ruby>一人<rt>ひとり</rt></ruby>で<ruby>対応<rt>たいおう</rt></ruby>が<ruby>難<rt>むずか</rt></ruby>しい" }
+];
 
-    const GROUPS = [
-      { key: "emotion", root: els.emotionChoices, items: DATA.emotions },
-      { key: "problem", root: els.problemChoices, items: DATA.problems },
-      { key: "support", root: els.supportChoices, items: DATA.supports }
-    ];
+// プレーンテキスト（buildMessage用）
+const distressLabels = [
+  "0 落ち着いている",
+  "1 少ししんどい",
+  "2 まあまあしんどい",
+  "3 かなりしんどい",
+  "4 とてもつらい",
+  "5 すぐ助けがほしい"
+];
 
-    const QUICK_CARDS = [
-      {
-        labelHtml: "<ruby>音<rt>おと</rt></ruby>がつらい",
-        state: { emotions: ["overloaded", "anxious"], problems: ["noise"], supports: ["quiet", "write", "slow"], distress: 3, freeText: "いまは音がつらいです。静かな場所で、短く書いて説明してほしいです。" }
-      },
-      {
-        labelHtml: "<ruby>予定<rt>よてい</rt></ruby>がわからず<ruby>不安<rt>ふあん</rt></ruby>",
-        state: { emotions: ["anxious", "confused"], problems: ["schedule"], supports: ["scheduleView", "write", "repeat"], distress: 2, freeText: "これから何をするか、順番で見せてほしいです。" }
-      },
-      {
-        labelHtml: "<ruby>言葉<rt>ことば</rt></ruby>が<ruby>出<rt>で</rt></ruby>にくい",
-        state: { emotions: ["cantTell", "confused"], problems: ["wording", "talkspeed"], supports: ["choice", "wait", "write"], distress: 2, freeText: "すぐに答えにくいです。選択肢で聞いて、少し待ってください。" }
-      },
-      {
-        labelHtml: "<ruby>少<rt>すこ</rt></ruby>し<ruby>休<rt>やす</rt></ruby>みたい",
-        state: { emotions: ["tired"], problems: ["sleepy"], supports: ["break", "alone"], distress: 2, freeText: "少し休むと戻れるかもしれません。" }
-      }
-    ];
+// 表示用HTML（ふりがなあり）
+const distressHtmlLabels = [
+  { num: "0", text: "<ruby>落<rt>お</rt></ruby>ち<ruby>着<rt>つ</rt></ruby>いている" },
+  { num: "1", text: "<ruby>少<rt>すこ</rt></ruby>ししんどい" },
+  { num: "2", text: "まあまあしんどい" },
+  { num: "3", text: "かなりしんどい" },
+  { num: "4", text: "とてもつらい" },
+  { num: "5", text: "すぐ<ruby>助<rt>たす</rt></ruby>けがほしい" }
+];
 
-    function renderChoiceGroup(root, items, name) {
-      root.innerHTML = items.map(item => `
-        <label class="choice-card">
-          <input type="checkbox" name="${name}" value="${item.label}" data-id="${item.id}" />
-          <span>
-            <span class="choice-label">${item.html || item.label}</span>
-            <span class="choice-desc">${item.descHtml || item.desc}</span>
-          </span>
-        </label>
-      `).join("");
-    }
+const emotionChoices = document.getElementById("emotionChoices");
+const problemChoices = document.getElementById("problemChoices");
+const supportChoices = document.getElementById("supportChoices");
+const distressScale = document.getElementById("distressScale");
+const quickCardsRoot = document.getElementById("quickCards");
+const freeText = document.getElementById("freeText");
+const nameText = document.getElementById("nameText");
+const emotionOther = document.getElementById("emotionOther");
+const problemOther = document.getElementById("problemOther");
+const outputText = document.getElementById("outputText");
+const statusText = document.getElementById("status");
+const form = document.getElementById("feelingsForm");
 
-    function renderScale() {
-      els.distressScale.innerHTML = DATA.distressHtmlLabels.map((item, index) => `
-        <label class="scale-btn">
-          <input type="radio" name="distress" value="${index}" ${index === 0 ? "checked" : ""} />
-          <span class="scale-num">${item.num}</span>
-          <span class="scale-text">${item.text}</span>
-        </label>
-      `).join("");
-    }
-
-    function renderQuickCards() {
-      els.quickCards.innerHTML = QUICK_CARDS.map((card, index) => `
-        <button type="button" class="quick-card" data-quick-index="${index}">${card.labelHtml}</button>
-      `).join("");
-    }
-
-    function getCheckedValues(root) {
-      return $$("input:checked", root).map(input => input.value);
-    }
-
-    function getCheckedItems(root, items) {
-      return $$("input:checked", root)
-        .map(input => items.find(item => item.id === input.dataset.id))
-        .filter(Boolean);
-    }
-
-    function setCheckedByIds(root, ids) {
-      $$("input", root).forEach(input => {
-        input.checked = ids.includes(input.dataset.id);
-      });
-    }
-
-    function getDistress() {
-      return Number($("input[name='distress']:checked")?.value || 0);
-    }
-
-    function setDistress(value) {
-      const input = $(`input[name='distress'][value='${value}']`);
-      if (input) input.checked = true;
-    }
-
-    function setStatus(message = "") {
-      els.status.textContent = message;
-    }
-
-    function resetForm(showStatus = true) {
-      GROUPS.forEach(group => setCheckedByIds(group.root, []));
-      els.freeText.value = "";
-      els.nameText.value = "";
-      els.emotionOther.value = "";
-      els.problemOther.value = "";
-      els.outputText.value = "";
-      setDistress(0);
-      updateOutput();
-      setStatus(showStatus ? "リセットしました。" : "");
-    }
-
-    function applyQuickCard(index) {
-      const card = QUICK_CARDS[index];
-      if (!card) return;
+const quickCards = [
+  {
+    labelHtml: "<ruby>音<rt>おと</rt></ruby>がつらい",
+    apply: () => {
       resetForm(false);
-      setCheckedByIds(els.emotionChoices, card.state.emotions || []);
-      setCheckedByIds(els.problemChoices, card.state.problems || []);
-      setCheckedByIds(els.supportChoices, card.state.supports || []);
-      setDistress(card.state.distress || 0);
-      els.freeText.value = card.state.freeText || "";
+      setChecks("emotionChoices", ["overloaded", "anxious"]);
+      setChecks("problemChoices", ["noise"]);
+      setChecks("supportChoices", ["quiet", "write", "slow"]);
+      setDistress(3);
+      freeText.value = "いまは音がつらいです。静かな場所で、短く書いて説明してほしいです。";
       updateOutput();
     }
-
-    function buildMessage() {
-      const name = els.nameText.value.trim();
-      const emotions = getCheckedValues(els.emotionChoices);
-      const problems = getCheckedValues(els.problemChoices);
-      const supports = getCheckedValues(els.supportChoices);
-      const distress = getDistress();
-      const emotionOther = els.emotionOther.value.trim();
-      const problemOther = els.problemOther.value.trim();
-      const note = els.freeText.value.trim();
-
-      const emotionList = emotionOther ? [...emotions, `その他（${emotionOther}）`] : emotions;
-      const problemList = problemOther ? [...problems, `その他（${problemOther}）`] : problems;
-
-      const lines = [];
-      if (name) lines.push(`名前：${name}`);
-      if (emotionList.length) lines.push(`いまの気持ち：${emotionList.join("、")}`);
-      lines.push(`しんどさの強さ：${distress} / 5（${DATA.distressLabels[distress]}）`);
-      if (problemList.length) lines.push(`困っていること：${problemList.join("、")}`);
-      if (supports.length) lines.push(`してほしい支援：${supports.join("、")}`);
-      if (note) lines.push(`自由入力：${note}`);
-      lines.push("", "相手に見せる用の短い文章：");
-
-      let shortText = "いま";
-      if (emotionList.length) shortText += `、${emotionList.join("・")}`;
-      shortText += "です。";
-      if (problemList.length) shortText += ` 困っていることは、${problemList.join("、")}です。`;
-      if (supports.length) shortText += ` ${supports.join("、")}。`;
-      if (note) shortText += ` ${note}`;
-
-      lines.push(shortText.trim());
-      return lines.join("\n");
+  },
+  {
+    labelHtml: "<ruby>予定<rt>よてい</rt></ruby>がわからず<ruby>不安<rt>ふあん</rt></ruby>",
+    apply: () => {
+      resetForm(false);
+      setChecks("emotionChoices", ["anxious", "confused"]);
+      setChecks("problemChoices", ["schedule"]);
+      setChecks("supportChoices", ["scheduleView", "write", "repeat"]);
+      setDistress(2);
+      freeText.value = "これから何をするか、順番で見せてほしいです。";
+      updateOutput();
     }
-
-    function updateOutput() {
-      els.outputText.value = buildMessage();
+  },
+  {
+    labelHtml: "<ruby>言葉<rt>ことば</rt></ruby>が<ruby>出<rt>で</rt></ruby>にくい",
+    apply: () => {
+      resetForm(false);
+      setChecks("emotionChoices", ["cantTell", "confused"]);
+      setChecks("problemChoices", ["wording", "talkspeed"]);
+      setChecks("supportChoices", ["choice", "wait", "write"]);
+      setDistress(2);
+      freeText.value = "すぐに答えにくいです。選択肢で聞いて、少し待ってください。";
+      updateOutput();
     }
-
-    async function copyOutput() {
-      try {
-        await navigator.clipboard.writeText(els.outputText.value);
-        setStatus("コピーしました。");
-      } catch {
-        setStatus("コピーできませんでした。手動でコピーしてください。");
-      }
+  },
+  {
+    labelHtml: "<ruby>少<rt>すこ</rt></ruby>し<ruby>休<rt>やす</rt></ruby>みたい",
+    apply: () => {
+      resetForm(false);
+      setChecks("emotionChoices", ["tired"]);
+      setChecks("problemChoices", ["sleepy"]);
+      setChecks("supportChoices", ["break", "alone"]);
+      setDistress(2);
+      freeText.value = "少し休むと戻れるかもしれません。";
+      updateOutput();
     }
+  }
+];
 
-    function buildHtmlOutput() {
-      const name = els.nameText.value.trim();
-      const distress = getDistress();
-      const emotionOther = els.emotionOther.value.trim();
-      const problemOther = els.problemOther.value.trim();
-      const note = els.freeText.value.trim();
-      const emotionHtmls = getCheckedItems(els.emotionChoices, DATA.emotions).map(item => item.html);
-      const problemHtmls = getCheckedItems(els.problemChoices, DATA.problems).map(item => item.html);
-      const supportHtmls = getCheckedItems(els.supportChoices, DATA.supports).map(item => item.html);
+function renderCheckboxGroup(root, items, name) {
+  root.innerHTML = items.map(item => `
+    <label class="choice-card">
+      <input type="checkbox" name="${name}" value="${item.label}" data-id="${item.id}" />
+      <span>
+        <span class="choice-label">${item.html || item.label}</span>
+        <span class="choice-desc">${item.descHtml || item.desc}</span>
+      </span>
+    </label>
+  `).join("");
+}
 
-      if (emotionOther) emotionHtmls.push(`その<ruby>他<rt>た</rt></ruby>（${emotionOther}）`);
-      if (problemOther) problemHtmls.push(`その<ruby>他<rt>た</rt></ruby>（${problemOther}）`);
+function renderDistressScale() {
+  distressScale.innerHTML = distressHtmlLabels.map((item, index) => `
+    <label class="scale-btn">
+      <input type="radio" name="distress" value="${index}" ${index === 0 ? "checked" : ""} />
+      <span class="scale-num">${item.num}</span>
+      <span class="scale-text">${item.text}</span>
+    </label>
+  `).join("");
+}
 
-      const rows = [];
-      if (name) rows.push(["<ruby>名前<rt>なまえ</rt></ruby>", name]);
-      if (emotionHtmls.length) rows.push(["いまの<ruby>気持<rt>きも</rt></ruby>ち", emotionHtmls.join("、")]);
-      rows.push(["しんどさの<ruby>強<rt>つよ</rt></ruby>さ", `${DATA.distressHtmlLabels[distress].num} / 5（${DATA.distressHtmlLabels[distress].text}）`]);
-      if (problemHtmls.length) rows.push(["<ruby>困<rt>こま</rt></ruby>っていること", problemHtmls.join("、")]);
-      if (supportHtmls.length) rows.push(["してほしい<ruby>支援<rt>しえん</rt></ruby>", supportHtmls.join("、")]);
-      if (note) rows.push(["<ruby>自由<rt>じゆう</rt></ruby><ruby>入力<rt>にゅうりょく</rt></ruby>", note]);
+function renderQuickCards() {
+  quickCardsRoot.innerHTML = "";
+  quickCards.forEach(card => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "quick-card";
+    btn.innerHTML = card.labelHtml;
+    btn.addEventListener("click", card.apply);
+    quickCardsRoot.appendChild(btn);
+  });
+}
 
-      const tableRows = rows.map(([th, td]) => `<tr><th>${th}</th><td>${td}</td></tr>`).join("");
-      let shortText = "いま";
-      if (emotionHtmls.length) shortText += `、${emotionHtmls.join("・")}`;
-      shortText += "です。";
-      if (problemHtmls.length) shortText += ` <ruby>困<rt>こま</rt></ruby>っていることは、${problemHtmls.join("、")}です。`;
-      if (supportHtmls.length) shortText += ` ${supportHtmls.join("、")}。`;
-      if (note) shortText += ` ${note}`;
+function getSelectedValues(rootSelector) {
+  return [...document.querySelectorAll(`#${rootSelector} input:checked`)].map(el => el.value);
+}
 
-      return { tableRows, shortText: shortText.trim() };
-    }
+function getDistress() {
+  const selected = document.querySelector('input[name="distress"]:checked');
+  return selected ? Number(selected.value) : 0;
+}
 
-    function savePdf() {
-      const { tableRows, shortText } = buildHtmlOutput();
-      const htmlContent = `<!DOCTYPE html>
+function setDistress(value) {
+  const target = document.querySelector(`input[name="distress"][value="${value}"]`);
+  if (target) target.checked = true;
+}
+
+function setChecks(rootSelector, ids) {
+  document.querySelectorAll(`#${rootSelector} input`).forEach(input => {
+    input.checked = ids.includes(input.dataset.id);
+  });
+}
+
+function buildMessage() {
+  const name = nameText.value.trim();
+  const selectedEmotions = getSelectedValues("emotionChoices");
+  const selectedProblems = getSelectedValues("problemChoices");
+  const selectedSupports = getSelectedValues("supportChoices");
+  const distress = getDistress();
+  const emotionOtherValue = emotionOther.value.trim();
+  const problemOtherValue = problemOther.value.trim();
+  const note = freeText.value.trim();
+
+  const emotionList = [...selectedEmotions];
+  const problemList = [...selectedProblems];
+
+  if (emotionOtherValue) emotionList.push(`その他（${emotionOtherValue}）`);
+  if (problemOtherValue) problemList.push(`その他（${problemOtherValue}）`);
+
+  const lines = [];
+
+  if (name) lines.push(`名前：${name}`);
+  if (emotionList.length > 0) lines.push(`いまの気持ち：${emotionList.join("、")}`);
+
+  lines.push(`しんどさの強さ：${distress} / 5（${distressLabels[distress].replace(/^\d\s/, "")}）`);
+
+  if (problemList.length > 0) lines.push(`困っていること：${problemList.join("、")}`);
+  if (selectedSupports.length > 0) lines.push(`してほしい支援：${selectedSupports.join("、")}`);
+  if (note) lines.push(`自由入力：${note}`);
+
+  lines.push("");
+  lines.push("相手に見せる用の短い文章：");
+
+  let shortText = "いま";
+  if (emotionList.length > 0) shortText += `、${emotionList.join("・")}`;
+  shortText += "です。";
+  if (problemList.length > 0) shortText += ` 困っていることは、${problemList.join("、")}です。`;
+  if (selectedSupports.length > 0) shortText += ` ${selectedSupports.join("、")}。`;
+  if (note) shortText += ` ${note}`;
+
+  lines.push(shortText.trim());
+  return lines.join("\n");
+}
+
+function updateOutput() {
+  outputText.value = buildMessage();
+}
+
+function copyOutput() {
+  navigator.clipboard.writeText(outputText.value)
+    .then(() => setStatus("コピーしました。"))
+    .catch(() => setStatus("コピーできませんでした。手動でコピーしてください。"));
+}
+
+function buildHtmlOutput() {
+  const name = nameText.value.trim();
+  const distress = getDistress();
+  const emotionOtherValue = emotionOther.value.trim();
+  const problemOtherValue = problemOther.value.trim();
+  const note = freeText.value.trim();
+
+  // 選択された項目をhtml付きで取得
+  const selectedEmotionHtmls = [...document.querySelectorAll('#emotionChoices input:checked')]
+    .map(el => emotions.find(e => e.id === el.dataset.id))
+    .filter(Boolean)
+    .map(e => e.html);
+  const selectedProblemHtmls = [...document.querySelectorAll('#problemChoices input:checked')]
+    .map(el => problems.find(p => p.id === el.dataset.id))
+    .filter(Boolean)
+    .map(p => p.html);
+  const selectedSupportHtmls = [...document.querySelectorAll('#supportChoices input:checked')]
+    .map(el => supports.find(s => s.id === el.dataset.id))
+    .filter(Boolean)
+    .map(s => s.html);
+
+  if (emotionOtherValue) selectedEmotionHtmls.push(`その<ruby>他<rt>た</rt></ruby>（${emotionOtherValue}）`);
+  if (problemOtherValue) selectedProblemHtmls.push(`その<ruby>他<rt>た</rt></ruby>（${problemOtherValue}）`);
+
+  const distressHtml = distressHtmlLabels[distress];
+  const rows = [];
+
+  if (name) rows.push([`<ruby>名前<rt>なまえ</rt></ruby>`, name]);
+  if (selectedEmotionHtmls.length > 0) rows.push([`いまの<ruby>気持<rt>きも</rt></ruby>ち`, selectedEmotionHtmls.join("、")]);
+  rows.push([`しんどさの<ruby>強<rt>つよ</rt></ruby>さ`, `${distressHtml.num} / 5（${distressHtml.text}）`]);
+  if (selectedProblemHtmls.length > 0) rows.push([`<ruby>困<rt>こま</rt></ruby>っていること`, selectedProblemHtmls.join("、")]);
+  if (selectedSupportHtmls.length > 0) rows.push([`してほしい<ruby>支援<rt>しえん</rt></ruby>`, selectedSupportHtmls.join("、")]);
+  if (note) rows.push([`<ruby>自由<rt>じゆう</rt></ruby><ruby>入力<rt>にゅうりょく</rt></ruby>`, note]);
+
+  const tableRows = rows.map(([th, td]) => `
+      <tr>
+        <th>${th}</th>
+        <td>${td}</td>
+      </tr>`).join("");
+
+  // 短文
+  let shortParts = ["いま"];
+  if (selectedEmotionHtmls.length > 0) shortParts.push(`、${selectedEmotionHtmls.join("・")}`);
+  shortParts.push("です。");
+  if (selectedProblemHtmls.length > 0) shortParts.push(` <ruby>困<rt>こま</rt></ruby>っていることは、${selectedProblemHtmls.join("、")}です。`);
+  if (selectedSupportHtmls.length > 0) shortParts.push(` ${selectedSupportHtmls.join("、")}。`);
+  if (note) shortParts.push(` ${note}`);
+  const shortText = shortParts.join("").trim();
+
+  return { tableRows, shortText };
+}
+
+function downloadText() {
+  const { tableRows, shortText } = buildHtmlOutput();
+  const htmlContent = `<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>いまの気持ちカード</title>
+  <title>いまの<ruby>気持<rt>きも</rt></ruby>ちカード</title>
   <style>
-    body { font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; line-height: 1.8; background: #fff4e6; color: #111; }
+    @page { size: A4; margin: 14mm; }
+    body { font-family: "Hiragino Sans", "Yu Gothic", sans-serif; max-width: 760px; margin: 0 auto; padding: 24px; line-height: 1.8; background: #fff; color: #111; }
     h1 { font-size: 1.4rem; margin-bottom: 16px; }
-    table { width: 100%; border-collapse: collapse; background: #fffaf4; border: 2px solid #111; border-radius: 14px; overflow: hidden; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; background: #fff; border: 2px solid #111; border-radius: 14px; overflow: hidden; margin-bottom: 20px; }
     th, td { padding: 10px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid #ddd; }
     th { width: 38%; font-weight: 700; white-space: nowrap; }
     tr:last-child th, tr:last-child td { border-bottom: none; }
-    .short { background: #fffaf4; border: 2px solid #111; border-radius: 14px; padding: 16px 20px; font-size: 1.05rem; line-height: 1.9; }
+    .short { background: #fff; border: 2px solid #111; border-radius: 14px; padding: 16px 20px; font-size: 1.05rem; line-height: 1.9; }
     .short-label { font-weight: 700; margin-bottom: 8px; }
-    @page { size: A4; margin: 12mm; }
+    .note { margin-top: 14px; font-size: 0.95rem; }
     @media print {
-      body { margin: 0 auto; background: #ffffff; }
-      table, .short { break-inside: avoid; }
-    }
-    @media (max-width: 640px) {
-      body { margin: 24px auto; }
-      table, tbody, tr, th, td { display: block; width: 100%; }
-      th { padding-bottom: 4px; border-bottom: none; }
-      td { padding-top: 0; }
+      body { padding: 0; }
+      .note { display: none; }
     }
   </style>
 </head>
 <body>
   <h1>いまの<ruby>気持<rt>きも</rt></ruby>ちカード</h1>
-  <table><tbody>${tableRows}</tbody></table>
+  <table>${tableRows}
+  </table>
   <div class="short">
     <div class="short-label"><ruby>相手<rt>あいて</rt></ruby>に<ruby>見<rt>み</rt></ruby>せる<ruby>用<rt>よう</rt></ruby>の<ruby>短<rt>みじか</rt></ruby>い<ruby>文章<rt>ぶんしょう</rt></ruby>：</div>
     ${shortText}
   </div>
+  <p class="note">この画面で印刷を開き、「PDFとして保存」を選んでください。</p>
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => window.print(), 250);
+    });
+  <\/script>
 </body>
 </html>`;
+  const printWindow = window.open('', '_blank', 'noopener,noreferrer');
+  if (!printWindow) {
+    setStatus("PDF保存画面を開けませんでした。ポップアップ設定を確認してください。");
+    return;
+  }
+  printWindow.document.open();
+  printWindow.document.write(htmlContent);
+  printWindow.document.close();
+  setStatus("PDF保存画面を開きました。印刷からPDFとして保存してください。");
+}
 
-      const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      const printWindow = window.open(url, "_blank", "noopener,noreferrer");
-      if (!printWindow) {
-        URL.revokeObjectURL(url);
-        setStatus("PDF保存用の画面を開けませんでした。ポップアップを許可してください。");
-        return;
-      }
+function setStatus(message = "") {
+  statusText.textContent = message;
+}
 
-      const cleanup = () => {
-        try { URL.revokeObjectURL(url); } catch {}
-      };
+function resetForm(showStatus = true) {
+  document.querySelectorAll('#emotionChoices input[type="checkbox"], #problemChoices input[type="checkbox"], #supportChoices input[type="checkbox"]').forEach(input => {
+    input.checked = false;
+  });
+  freeText.value = "";
+  nameText.value = "";
+  emotionOther.value = "";
+  problemOther.value = "";
+  outputText.value = "";
+  setDistress(0);
+  updateOutput();
+  if (showStatus) {
+    setStatus("リセットしました。");
+  } else {
+    setStatus("");
+  }
+}
 
-      printWindow.addEventListener("load", () => {
-        setTimeout(() => {
-          try {
-            printWindow.focus();
-            printWindow.print();
-            setStatus("PDF保存画面を開きました。印刷先でPDF保存を選んでください。");
-          } catch {
-            setStatus("PDF保存画面を開きました。ブラウザの共有や印刷からPDF保存してください。");
-          } finally {
-            setTimeout(cleanup, 15000);
-          }
-        }, 300);
-      }, { once: true });
-    }
+renderCheckboxGroup(emotionChoices, emotions, "emotion");
+renderCheckboxGroup(problemChoices, problems, "problem");
+renderCheckboxGroup(supportChoices, supports, "support");
+renderDistressScale();
+renderQuickCards();
+resetForm(false);
 
-    function bindEvents() {
-      els.form.addEventListener("input", updateOutput);
-      els.form.addEventListener("change", updateOutput);
-      els.quickCards.addEventListener("click", event => {
-        const button = event.target.closest("[data-quick-index]");
-        if (!button) return;
-        applyQuickCard(Number(button.dataset.quickIndex));
-      });
-      els.generateBtn.addEventListener("click", updateOutput);
-      els.copyBtn.addEventListener("click", copyOutput);
-      els.downloadBtn.addEventListener("click", savePdf);
-      els.resetBtn.addEventListener("click", () => resetForm(true));
-      window.addEventListener("pageshow", () => resetForm(false));
-    }
+form.addEventListener("change", updateOutput);
+freeText.addEventListener("input", updateOutput);
+nameText.addEventListener("input", updateOutput);
+emotionOther.addEventListener("input", updateOutput);
+problemOther.addEventListener("input", updateOutput);
 
-    function init() {
-      renderChoiceGroup(els.emotionChoices, DATA.emotions, "emotion");
-      renderChoiceGroup(els.problemChoices, DATA.problems, "problem");
-      renderChoiceGroup(els.supportChoices, DATA.supports, "support");
-      renderScale();
-      renderQuickCards();
-      bindEvents();
-      resetForm(false);
-    }
+document.getElementById("generateBtn").addEventListener("click", updateOutput);
+document.getElementById("copyBtn").addEventListener("click", copyOutput);
+document.getElementById("downloadBtn").addEventListener("click", downloadText);
+document.getElementById("resetBtn").addEventListener("click", () => resetForm(true));
 
-    init();
-  })();
+window.addEventListener("pageshow", () => {
+  resetForm(false);
+});
   </script>
 </body>
 </html>
