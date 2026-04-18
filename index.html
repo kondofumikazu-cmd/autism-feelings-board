@@ -71,7 +71,7 @@
           <button type="button" id="generateBtn">文章を作る</button>
           <button type="button" id="copyBtn">コピー</button>
           <button type="button" id="downloadBtn">テキスト保存</button>
-          <button type="reset" class="secondary">リセット</button>
+          <button type="button" id="resetBtn" class="secondary">リセット</button>
         </div>
         <p id="status" class="status" aria-live="polite"></p>
       </section>
@@ -362,7 +362,6 @@ function setStatus(message = "") {
 }
 
 function resetForm(showStatus = true) {
-  form.reset();
   document.querySelectorAll('#emotionChoices input[type="checkbox"], #problemChoices input[type="checkbox"], #supportChoices input[type="checkbox"]').forEach(input => {
     input.checked = false;
   });
@@ -397,9 +396,7 @@ document.getElementById("generateBtn").addEventListener("click", updateOutput);
 document.getElementById("copyBtn").addEventListener("click", copyOutput);
 document.getElementById("downloadBtn").addEventListener("click", downloadText);
 
-form.addEventListener("reset", () => {
-  setTimeout(() => resetForm(true), 0);
-});
+document.getElementById("resetBtn").addEventListener("click", () => resetForm(true));
 
 window.addEventListener("pageshow", () => {
   resetForm(false);
