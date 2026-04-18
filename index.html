@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="color-scheme" content="light dark" />
   <meta name="description" content="自閉スペクトラム症の人が、いまの気持ちや必要な支援を、テキストと選択肢で伝えやすくする日本語Webサイトです。" />
-  <title>いまの気持ちカード</title>
+  <title>いまの気持ちカード PDF</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -70,7 +70,7 @@
         <div class="button-row">
           <button type="button" id="generateBtn"><ruby>文章<rt>ぶんしょう</rt></ruby>を<ruby>作<rt>つく</rt></ruby>る</button>
           <button type="button" id="copyBtn">コピー</button>
-          <button type="button" id="downloadBtn">HTML<ruby>保存<rt>ほぞん</rt></ruby></button>
+          <button type="button" id="downloadBtn">PDF<ruby>保存<rt>ほぞん</rt></ruby></button>
           <button type="button" id="resetBtn" class="secondary">リセット</button>
         </div>
         <p id="status" class="status" aria-live="polite"></p>
@@ -343,7 +343,7 @@
       return { tableRows, shortText: shortText.trim() };
     }
 
-    function downloadHtml() {
+    function savePdf() {
       const { tableRows, shortText } = buildHtmlOutput();
       const htmlContent = `<!DOCTYPE html>
 <html lang="ja">
@@ -360,6 +360,11 @@
     tr:last-child th, tr:last-child td { border-bottom: none; }
     .short { background: #fffaf4; border: 2px solid #111; border-radius: 14px; padding: 16px 20px; font-size: 1.05rem; line-height: 1.9; }
     .short-label { font-weight: 700; margin-bottom: 8px; }
+    @page { size: A4; margin: 12mm; }
+    @media print {
+      body { margin: 0 auto; background: #ffffff; }
+      table, .short { break-inside: avoid; }
+    }
     @media (max-width: 640px) {
       body { margin: 24px auto; }
       table, tbody, tr, th, td { display: block; width: 100%; }
@@ -382,10 +387,30 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "ima-no-kimochi-card.html";
-      a.click();
-      URL.revokeObjectURL(url);
-      setStatus("HTMLを保存しました。");
+      const printWindow = window.open(url, "_blank", "noopener,noreferrer");
+      if (!printWindow) {
+        URL.revokeObjectURL(url);
+        setStatus("PDF保存用の画面を開けませんでした。ポップアップを許可してください。");
+        return;
+      }
+
+      const cleanup = () => {
+        try { URL.revokeObjectURL(url); } catch {}
+      };
+
+      printWindow.addEventListener("load", () => {
+        setTimeout(() => {
+          try {
+            printWindow.focus();
+            printWindow.print();
+            setStatus("PDF保存画面を開きました。印刷先でPDF保存を選んでください。");
+          } catch {
+            setStatus("PDF保存画面を開きました。ブラウザの共有や印刷からPDF保存してください。");
+          } finally {
+            setTimeout(cleanup, 15000);
+          }
+        }, 300);
+      }, { once: true });
     }
 
     function bindEvents() {
@@ -398,7 +423,7 @@
       });
       els.generateBtn.addEventListener("click", updateOutput);
       els.copyBtn.addEventListener("click", copyOutput);
-      els.downloadBtn.addEventListener("click", downloadHtml);
+      els.downloadBtn.addEventListener("click", savePdf);
       els.resetBtn.addEventListener("click", () => resetForm(true));
       window.addEventListener("pageshow", () => resetForm(false));
     }
